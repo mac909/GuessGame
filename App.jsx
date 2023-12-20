@@ -1,5 +1,6 @@
 import { StyleSheet, ImageBackground } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
+import { StatusBar } from "expo-status-bar";
 import React from "react";
 import { useState } from "react";
 
@@ -50,33 +51,36 @@ export default function App() {
 	}
 
 	return (
-		<LinearGradient
-			style={styles.container}
-			// colors={["#4c669f", "#3b5998", "#192f6a"]}
-			// colors={["#ff0000", "#ff7f00", "#ffff00"]}
-			colors={["#00ffff", "#0000ff", "#800080"]}
-		>
-			<ImageBackground
-				source={require("./assets/images/cards.jpg")}
-				resizeMode="cover"
-				imageStyle={styles.backgroundImage}
-				style={styles.backgroundContainer}
+		<>
+			<StatusBar hidden />
+			<LinearGradient
+				style={styles.container}
+				// colors={["#4c669f", "#3b5998", "#192f6a"]}
+				// colors={["#ff0000", "#ff7f00", "#ffff00"]}
+				colors={["#00ffff", "#0000ff", "#800080"]}
 			>
-				{activeScreen}
-			</ImageBackground>
-		</LinearGradient>
+				<ImageBackground
+					source={require("./assets/images/cards.jpg")}
+					resizeMode="cover"
+					imageStyle={styles.backgroundImage}
+					style={styles.backgroundContainer}
+				>
+					{activeScreen}
+				</ImageBackground>
+			</LinearGradient>
+		</>
 	);
 }
 
 const styles = StyleSheet.create({
 	container: {
 		flex: 1,
-		flexDirection: "row",
+		// flexDirection: "column",
 		// alignItems: "center",
 		// justifyContent: "start",
 	},
 	backgroundContainer: {
-		// flex: 1,
+		flex: 1,
 		flexDirection: "row",
 		alignItems: "center",
 		justifyContent: "center",

@@ -1,7 +1,13 @@
 import React from "react";
 import { useState, useEffect } from "react";
 
-import { View, Text, StyleSheet, ScrollView } from "react-native";
+import {
+	View,
+	Text,
+	StyleSheet,
+	ScrollView,
+	useWindowDimensions,
+} from "react-native";
 
 import PrimaryButton from "../../components/PrimaryButton/PrimaryButton";
 
@@ -10,6 +16,17 @@ const GamePlayScreen = ({ enteredValue, onPress, setWinningValue }) => {
 	const [opponentGuesses, setOpponentGuesses] = useState([]);
 	const [lowerBound, setLowerBound] = useState(1);
 	const [upperBound, setUpperBound] = useState(100);
+	const [isLandscape, setIsLandscape] = useState(false);
+
+	const { width, height } = useWindowDimensions();
+
+	useEffect(() => {
+		if (width > height) {
+			setIsLandscape(true);
+		} else {
+			setIsLandscape(false);
+		}
+	}, [width, height]);
 
 	const opponentGuessHandler = () => {
 		let guess;
@@ -83,8 +100,57 @@ const GamePlayScreen = ({ enteredValue, onPress, setWinningValue }) => {
 		opponentGuessHandler();
 	}, [opponentGuesses]);
 
-	return (
-		<View style={styles.mainContainer}>
+	return isLandscape ? (
+		<View style={[styles.mainContainer, { flexDirection: "row" }]}>
+			<View style={styles.landScapeMainContainer}>
+				<View style={styles.container}>
+					<Text style={{ fontSize: 20, fontWeight: "bold" }}>
+						Opponent Guess:
+					</Text>
+					<Text style={{ fontSize: 20 }}>{opponentGuess}</Text>
+				</View>
+				<View style={styles.container}>
+					<Text style={{ fontSize: 20, fontWeight: "bold" }}>
+						Your Number:
+					</Text>
+					<Text style={{ fontSize: 20 }}>{enteredValue}</Text>
+					<View style={styles.buttonContainer}>
+						<PrimaryButton onPress={higherButtonHandler}>
+							Higher
+						</PrimaryButton>
+						<PrimaryButton onPress={lowerButtonHandler}>
+							Lower
+						</PrimaryButton>
+					</View>
+				</View>
+			</View>
+			<View
+				style={[styles.scrollContainer, { flex: 1, maxHeight: "79%" }]}
+			>
+				<Text style={{ fontSize: 20, fontWeight: "bold" }}>
+					Previous Guesses:
+				</Text>
+				<ScrollView style={{ width: "100%" }}>
+					<View>
+						{[...opponentGuesses].reverse().map((guess, index) => (
+							<Text
+								key={index}
+								style={{
+									fontSize: 30,
+									margin: 5,
+									padding: 5,
+									textAlign: "center",
+								}}
+							>
+								{guess}
+							</Text>
+						))}
+					</View>
+				</ScrollView>
+			</View>
+		</View>
+	) : (
+		<View style={[styles.mainContainer, { marginTop: 50, maxWidth: 400 }]}>
 			<View style={styles.container}>
 				<Text style={{ fontSize: 20, fontWeight: "bold" }}>
 					Opponent Guess:
@@ -105,7 +171,7 @@ const GamePlayScreen = ({ enteredValue, onPress, setWinningValue }) => {
 					</PrimaryButton>
 				</View>
 			</View>
-			<View style={styles.scrollContainer}>
+			<View style={[styles.scrollContainer]}>
 				<Text style={{ fontSize: 20, fontWeight: "bold" }}>
 					Previous Guesses:
 				</Text>
@@ -136,8 +202,17 @@ export default GamePlayScreen;
 const styles = StyleSheet.create({
 	mainContainer: {
 		flex: 1,
-		marginTop: 50,
-		maxWidth: 400,
+		// marginTop: 50,
+		// maxWidth: 400,
+		// flexDirection: "row",
+		// alignItems: "center",
+		// justifyContent: "center",
+	},
+	landScapeMainContainer: {
+		flex: 1,
+		flexDirection: "column",
+		// marginTop: 50,
+		// maxWidth: 400,
 		// alignItems: "center",
 		// justifyContent: "center",
 	},

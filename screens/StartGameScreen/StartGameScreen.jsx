@@ -7,6 +7,8 @@ import {
 	Text,
 	TouchableWithoutFeedback,
 	Keyboard,
+	Dimensions,
+	KeyboardAvoidingView,
 } from "react-native";
 
 import PrimaryButton from "../../components/PrimaryButton/PrimaryButton";
@@ -33,49 +35,56 @@ const StartGameScreen = ({ onPress }) => {
 	};
 
 	return (
-		<TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
-			<View style={styles.container}>
-				<View>
-					<Text style={{ fontSize: 20, fontWeight: "bold" }}>
-						Select a number between:
-					</Text>
+		<KeyboardAvoidingView behavior="padding">
+			<TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
+				<View style={styles.container}>
+					<View style={{ alignItems: "center" }}>
+						<Text style={{ fontSize: 20, fontWeight: "bold" }}>
+							Select a number between:
+						</Text>
+					</View>
+					<View style={styles.inputContainer}>
+						<TextInput
+							style={styles.textInput}
+							keyboardType="number-pad"
+							placeholder="0-99"
+							placeholderTextColor="gray"
+							onChange={(event) =>
+								numberInputHandler(event.nativeEvent.text)
+							}
+							value={enteredValue}
+						/>
+					</View>
+					<View style={styles.buttonContainer}>
+						<PrimaryButton
+							onPress={() => confirmInputHandler(enteredValue)}
+						>
+							Start Game
+						</PrimaryButton>
+						<PrimaryButton onPress={resetInputHandler}>
+							Reset
+						</PrimaryButton>
+					</View>
 				</View>
-				<View style={styles.inputContainer}>
-					<TextInput
-						style={styles.textInput}
-						keyboardType="number-pad"
-						placeholder="0-99"
-						placeholderTextColor="gray"
-						onChange={(event) =>
-							numberInputHandler(event.nativeEvent.text)
-						}
-						value={enteredValue}
-					/>
-				</View>
-				<View style={styles.buttonContainer}>
-					<PrimaryButton
-						onPress={() => confirmInputHandler(enteredValue)}
-					>
-						Start Game
-					</PrimaryButton>
-					<PrimaryButton onPress={resetInputHandler}>
-						Reset
-					</PrimaryButton>
-				</View>
-			</View>
-		</TouchableWithoutFeedback>
+			</TouchableWithoutFeedback>
+		</KeyboardAvoidingView>
 	);
 };
 
 export default StartGameScreen;
 
+const windowWidth = Dimensions.get("window").width;
+const windowHeight = Dimensions.get("window").height;
+const orientation = windowWidth > windowHeight ? "landscape" : "portrait";
+
 const styles = StyleSheet.create({
 	container: {
 		// flex: 1,
 		backgroundColor: "white",
-		alignItems: "center",
+		// alignItems: "center",
 		// justifyContent: "center",
 		// marginTop: 125,
+		// textAlign: "center",
 		margin: 20,
 		padding: 20,
 		borderRadius: 30,
